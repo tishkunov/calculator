@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.main {
+			    background-color: #358cff;
+			    height: 400px;
+			    margin: 100px auto;
+			    min-width: 320px;
+			    width: 320px;
+			    -webkit-box-shadow: 5px 5px 20px 7px rgba(0, 0, 0, 0.46);
+			    -moz-box-shadow: 5px 5px 20px 7px rgba(0, 0, 0, 0.46);
+			    box-shadow: 5px 5px 20px 7px rgba(0, 0, 0, 0.46);
+			    border-radius: 5px;
+		}
+		.title {
+			color:#fff;
+			font-size: 24px;
+			text-align: center;
+			padding-top:15px;
+		}
+		.btn-default {
+			width: 60px;
+			height: 50px;
+			margin: 4px;
+			background-color: #fff;
+			border-radius: 5px;
+			border:1px solid transparent;
+			cursor: pointer;
+			float:left;
+		}
+		.btn-default:hover {
+			color: #333;
+		    background-color: #e6e6e6;
+		    border-color: #adadad;
+		}
+		.space-buttons {
+			width: 280px;
+			margin:0 auto;
+		}
+		.ce {
+			color: #fff;
+		    background-color: #d9534f;
+		    border-color: #d43f3a;
+		}
+		.ce:hover {
+			background-color: #d43f3a;
+			border-color: #d43f3a;
+			color:#fff;
+		}
+		#output {
+			    border-radius: 5px;
+		    border: 1px solid grey;
+		    background-color: white;
+		    margin-left: 6px;
+		    margin-right: 6px;
+		    padding: 0 5px;
+		    height: 50px;
+		    margin-bottom: 6px;
+		    width: 265px;
+		    box-sizing:border-box;
+		    margin-left: 25px;
+		}
+		#p-output {
+			float: right;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="wrapper">
+			<div class="main">
+				<p class="title">Calculator</p>
+				<div id="output">
+					<p id="p-output">0</p>
+				</div>
+				<div class="space-buttons">
+					<button class="btn btn-default btn-number" id="0">0</button>
+					<button class="btn btn-default ce" id="ce">C</button>
+					<button class="btn btn-default sign" id="+">+</button>
+					<button class="btn btn-default sign" id="-">-</button>
+					<button class="btn btn-default btn-number" id="1">1</button>
+					<button class="btn btn-default btn-number" id="2">2</button>
+					<button class="btn btn-default btn-number" id="3">3</button>
+					<button class="btn btn-default sign" id="*">*</button>
+					<button class="btn btn-default btn-number" id="4">4</button>
+					<button class="btn btn-default btn-number" id="5">5</button>
+					<button class="btn btn-default btn-number" id="6">6</button>
+					<button class="btn btn-default sign" id="/">/</button>
+					<button class="btn btn-default btn-number" id="7">7</button>
+					<button class="btn btn-default btn-number" id="8">8</button>
+					<button class="btn btn-default btn-number" id="9">9</button>
+					<button class="btn btn-default" id="equal">=</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	function id(id) {
+		return document.getElementById(id);
+	}
+	var currentSign;
+	var globalValue = 0;
+	var currentValue = 0;
+	var globalVar = 0;
+	function checkNumber() {
+		if (globalValue == 0) {
+			globalVar = 1;
+			id('p-output').innerHTML = String(this.id);
+			globalValue = Number(this.id);
+		}
+		else {
+			console.log(globalValue)
+			if (currentSign == undefined && globalVar == 0) {
+				globalValue = 0;
+				currentValue = 0;
+				globalVar = 1;
+				id('p-output').innerHTML = String(this.id);
+				console.log(this,this.id)
+
+			}
+			else {
+				if (currentSign == undefined && globalVar !=0 ) {
+					id('p-output').innerHTML += String(this.id);
+					globalValue += String(this.id);
+				}
+			
+				else {
+					if (currentValue == 0) {
+					id('p-output').innerHTML = String(this.id);
+					currentValue = Number(this.id);
+					}
+					else {
+					id('p-output').innerHTML += String(this.id);
+					currentValue += String(this.id);
+					}
+				}
+			}
+			
+			
+		}
+	}
+
+	function checkSign() {
+		currentSign = String(this.id);
+	}
+
+	function equal() {
+		
+		switch(currentSign){
+				case '+':
+				console.log(typeof Number(globalValue))
+				globalValue = Number(globalValue) + Number(currentValue);
+				id('p-output').innerHTML = String(globalValue);
+				break;
+
+				case '-':
+				globalValue = Number(globalValue) - Number(currentValue);
+				id('p-output').innerHTML = String(globalValue);
+				break;
+
+				case '*':
+				globalValue = Number(globalValue) * Number(currentValue);
+				id('p-output').innerHTML = String(globalValue);
+				break;
+
+				case '/':
+				globalValue = Number(globalValue) / Number(currentValue);
+				id('p-output').innerHTML = String(globalValue);
+				break;
+			}
+		currentValue = 0;
+		currentSign = undefined;
+		globalVar = 0;
+	}
+
+	function ce() {
+		globalValue = 0;
+		globalVar = 0;
+		currentSign = undefined;
+		currentValue = 0;
+		id('p-output').innerHTML = String(globalValue);
+	}
+
+	var numbers = document.getElementsByClassName('btn-number');
+
+	[].forEach.call(numbers,function(item){
+		item.addEventListener('click',checkNumber)
+	});
+
+	var signs = document.getElementsByClassName('sign');
+
+	[].forEach.call(signs,function(item){
+		item.addEventListener('click',checkSign)
+	});
+
+	
+	id('equal').addEventListener('click',equal);
+
+	id('ce').addEventListener('click',ce)
+	</script>
+</body>
+</html>
